@@ -1,0 +1,15 @@
+.post_item {
+  width: 100%;
+  border: 2px solid teal;
+  padding: 20px 30px;
+  box-sizing: border-box;
+
+  .post_item__title {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    justify-content: left;
+    gap: 5px;
+    margin: 0;
+  }
+}

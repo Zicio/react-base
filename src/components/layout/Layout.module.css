@@ -1,0 +1,11 @@
+.layout {
+  text-align: center;
+  background-color: gray;
+}
+
+.main {
+  margin: 0 auto;
+  margin-top: 30px;
+  max-width: 1100px;
+  box-sizing: border-box;
+}
