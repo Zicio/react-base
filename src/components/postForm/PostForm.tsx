@@ -1,16 +1,19 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import MyInput from "../UI/Input/MyInput";
 import MyButton from "../UI/button/MyButton";
-import { PostsContext } from "../../pages/MainPage";
+import { IPost } from "../../types";
 
-const PostForm = () => {
-  const { setPosts } = useContext(PostsContext); //TODO
+const PostForm: React.FC<{ create: (post: IPost) => void }> = ({ create }) => {
   const defaultNewPost = { title: "", body: "" };
   const [newPost, setNewPost] = useState(defaultNewPost);
 
   const addPost = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setPosts([...posts, { id: Date.now(), ...newPost }]);
+    const post = {
+      id: Date.now(),
+      ...newPost,
+    };
+    create(post);
     setNewPost(defaultNewPost);
   };
 

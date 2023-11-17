@@ -1,13 +1,8 @@
-import { createContext, useState } from "react";
+import { useState } from "react";
 import PostsList from "../components/postsList/PostsList";
-import PostForm from "../components/postForm/postForm";
+import PostForm from "../components/postForm/PostForm";
 import { IPost } from "../types";
-
-export interface IPostsContext {
-  posts: IPost[];
-  setPosts: React.Dispatch<React.SetStateAction<IPost[]>>;
-}
-export const PostsContext = createContext<null | IPostsContext>(null);
+import MySelect from "../components/UI/select/MySelect";
 
 const MainPage = () => {
   const [posts, setPosts] = useState([
@@ -28,12 +23,35 @@ const MainPage = () => {
     },
   ]);
 
+  const [selectedSort, setSelectedSort] = useState("");
+
+  const createPost = (newPost: IPost) => {
+    setPosts([...posts, newPost]);
+  };
+
+  const deletePost = (id: number) => {
+    setPosts(posts.filter((post) => post.id !== id));
+  };
+
+  const sortPosts = (sort: string) => {
+    setSelectedSort(sort);
+    setPosts(posts.sort((a, b) => a[sort].localeCompare(b[sort]))); //TODO
+  };
+
   return (
     <>
-      <PostsContext.Provider value={{ posts, setPosts }}>
-        <PostForm />
-        <PostsList posts={posts} title="Список постов" />
-      </PostsContext.Provider>
+      <PostForm create={createPost} />
+      <hr style={{ margin: "15px" }} />
+      <MySelect
+        selectedSort={selectedSort}
+        changeSort={setSelectedSort}
+        defaultOption={{ value: "default", name: "Cортировка по" }}
+        options={[
+          { value: "body", name: "По описанию" },
+          { value: "title", name: "По названию" },
+        ]}
+      />
+      <PostsList posts={posts} remove={deletePost} title="Список постов" />
     </>
   );
 };
