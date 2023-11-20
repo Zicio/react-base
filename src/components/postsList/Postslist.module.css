@@ -4,13 +4,6 @@
   text-align: center;
 }
 
-.post_list_notification {
-  display: inline-block;
-  width: 100%;
-  margin-top: 20px;
-  text-align: center;
-}
-
 .posts_list {
   display: grid;
   gap: 20px;

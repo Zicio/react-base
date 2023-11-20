@@ -9,4 +9,7 @@ export interface IOption {
   value: string;
 }
 
-export type sort = Exclude<keyof IPost, "id">;
+export interface IFilter {
+  sort: Exclude<keyof IPost, "id"> | null;
+  query: string;
+}

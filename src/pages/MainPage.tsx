@@ -1,19 +1,19 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import PostsList from "../components/postsList/PostsList";
 import PostForm from "../components/postForm/PostForm";
-import { IPost, sort } from "../types";
-import MySelect from "../components/UI/select/MySelect";
+import { IFilter, IPost } from "../types";
+import PostFilter from "../components/PostFilter/postFilter";
 
 const MainPage = () => {
   const [posts, setPosts] = useState([
     {
       id: 1,
-      title: "Aost 1",
+      title: "Bost 1",
       body: "Corem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eu iaculis aliquet, nisl nisl aliquet nisl, eu iaculis nisl nisl euismod nisl.",
     },
     {
       id: 2,
-      title: "Bost 2",
+      title: "Dost 2",
       body: "Borem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eu iaculis aliquet, nisl nisl aliquet nisl, eu iaculis nisl nisl euism",
     },
     {
@@ -23,7 +23,10 @@ const MainPage = () => {
     },
   ]);
 
-  const [selectedSort, setSelectedSort] = useState<sort>("title");
+  const [filter, setFilter] = useState<IFilter>({
+    sort: null,
+    query: "",
+  });
 
   const createPost = (newPost: IPost) => {
     setPosts([...posts, newPost]);
@@ -33,26 +36,47 @@ const MainPage = () => {
     setPosts(posts.filter((post) => post.id !== id));
   };
 
-  const sortPosts = (sort: sort) => {
-    console.log({ sort });
-    setSelectedSort(sort);
-    setPosts(posts.sort((a, b) => a[sort].localeCompare(b[sort])));
-  };
+  const sortedPosts = useMemo(() => {
+    if (filter.sort) {
+      return posts.sort(
+        (a, b) => a[filter.sort!].localeCompare(b[filter.sort!]) //TODO разобраться с типами
+      );
+    }
+    return posts;
+  }, [filter.sort, posts]);
+
+  const sortedAndSearchedPosts = useMemo(() => {
+    if (filter.query) {
+      return sortedPosts.filter((post) =>
+        post.title.toLowerCase().includes(filter.query.toLowerCase())
+      );
+    }
+    return sortedPosts;
+  }, [filter.query, sortedPosts]);
 
   return (
     <>
       <PostForm create={createPost} />
       <hr style={{ margin: "15px" }} />
-      <MySelect
-        selectedSort={selectedSort}
-        changeSort={sortPosts}
-        defaultOption={{ value: "default", name: "Cортировка по" }}
-        options={[
-          { value: "body", name: "По описанию" },
-          { value: "title", name: "По названию" },
-        ]}
-      />
-      <PostsList posts={posts} remove={deletePost} title="Список постов" />
+      <PostFilter filter={filter} setFilter={setFilter} />
+      {!sortedAndSearchedPosts.length ? (
+        <span
+          style={{
+            display: "inline-block",
+            width: "100%",
+            marginTop: "20px",
+            textAlign: "center",
+          }}
+        >
+          Посты не найдены
+        </span>
+      ) : (
+        <PostsList
+          posts={sortedAndSearchedPosts}
+          remove={deletePost}
+          title="Список постов"
+        />
+      )}
     </>
   );
 };
