@@ -1,29 +1,29 @@
 import { useState } from "react";
 import PostsList from "../components/postsList/PostsList";
 import PostForm from "../components/postForm/PostForm";
-import { IPost } from "../types";
+import { IPost, sort } from "../types";
 import MySelect from "../components/UI/select/MySelect";
 
 const MainPage = () => {
   const [posts, setPosts] = useState([
     {
       id: 1,
-      title: "Post 1",
-      body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eu iaculis aliquet, nisl nisl aliquet nisl, eu iaculis nisl nisl euismod nisl.",
+      title: "Aost 1",
+      body: "Corem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eu iaculis aliquet, nisl nisl aliquet nisl, eu iaculis nisl nisl euismod nisl.",
     },
     {
       id: 2,
-      title: "Post 2",
-      body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eu iaculis aliquet, nisl nisl aliquet nisl, eu iaculis nisl nisl euism",
+      title: "Bost 2",
+      body: "Borem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eu iaculis aliquet, nisl nisl aliquet nisl, eu iaculis nisl nisl euism",
     },
     {
       id: 3,
-      title: "Post 3",
-      body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eu iaculis aliquet, nisl nisl aliquet nisl, eu iaculis nisl nisl euawawdawdawdawdawdawdawdawd",
+      title: "Cost 3",
+      body: "Aorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eu iaculis aliquet, nisl nisl aliquet nisl, eu iaculis nisl nisl euawawdawdawdawdawdawdawdawd",
     },
   ]);
 
-  const [selectedSort, setSelectedSort] = useState("");
+  const [selectedSort, setSelectedSort] = useState<sort>("title");
 
   const createPost = (newPost: IPost) => {
     setPosts([...posts, newPost]);
@@ -33,9 +33,10 @@ const MainPage = () => {
     setPosts(posts.filter((post) => post.id !== id));
   };
 
-  const sortPosts = (sort: string) => {
+  const sortPosts = (sort: sort) => {
+    console.log({ sort });
     setSelectedSort(sort);
-    setPosts(posts.sort((a, b) => a[sort].localeCompare(b[sort]))); //TODO
+    setPosts(posts.sort((a, b) => a[sort].localeCompare(b[sort])));
   };
 
   return (
@@ -44,7 +45,7 @@ const MainPage = () => {
       <hr style={{ margin: "15px" }} />
       <MySelect
         selectedSort={selectedSort}
-        changeSort={setSelectedSort}
+        changeSort={sortPosts}
         defaultOption={{ value: "default", name: "Cортировка по" }}
         options={[
           { value: "body", name: "По описанию" },
