@@ -1,11 +1,11 @@
 import { SelectHTMLAttributes } from "react";
-import { IOption } from "../../../types";
+import { IFilter, IOption } from "../../../types";
 
 interface IMySelect extends SelectHTMLAttributes<HTMLSelectElement> {
   defaultValue: string;
   options: IOption[];
-  selectedSort: sort;
-  changeSort: (value: sort) => void;
+  selectedSort: IFilter["sort"];
+  changeSort: (value: IFilter["sort"]) => void;
 }
 
 const MySelect: React.FC<IMySelect> = ({
@@ -18,9 +18,9 @@ const MySelect: React.FC<IMySelect> = ({
   return (
     <select
       {...props}
-      value={selectedSort}
+      value={selectedSort!}
       onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-        changeSort(e.target.value as sort)
+        changeSort(e.target.value as IFilter["sort"])
       }
     >
       <option value="" disabled>

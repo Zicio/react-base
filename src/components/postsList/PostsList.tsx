@@ -8,6 +8,20 @@ const PostsList: FC<{
   title: string;
   remove: (id: number) => void;
 }> = ({ posts, title, remove }) => {
+  if (!posts.length) {
+    return (
+      <span
+        style={{
+          display: "inline-block",
+          width: "100%",
+          marginTop: "20px",
+          textAlign: "center",
+        }}
+      >
+        Посты не найдены
+      </span>
+    );
+  }
   return (
     <>
       <h2 className={styles.posts_list__title}>{title}</h2>

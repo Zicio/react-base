@@ -7,3 +7,14 @@
   border: 2px solid teal;
   cursor: pointer;
 }
+
+.myBtn:hover {
+  background-color: teal;
+  color: white;
+}
+
+.myBtn:active {
+  background-color: darkslategray;
+  border-color: darkslategray;
+  color: white;
+}

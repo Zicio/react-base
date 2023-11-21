@@ -2,7 +2,9 @@ import { useMemo, useState } from "react";
 import PostsList from "../components/postsList/PostsList";
 import PostForm from "../components/postForm/PostForm";
 import { IFilter, IPost } from "../types";
-import PostFilter from "../components/PostFilter/postFilter";
+import PostFilter from "../components/postFilter/PostFilter";
+import MyModal from "../components/UI/modal/MyModal";
+import MyButton from "../components/UI/button/MyButton";
 
 const MainPage = () => {
   const [posts, setPosts] = useState([
@@ -24,12 +26,15 @@ const MainPage = () => {
   ]);
 
   const [filter, setFilter] = useState<IFilter>({
-    sort: null,
+    sort: "",
     query: "",
   });
 
+  const [isModal, setIsModal] = useState<boolean>(false);
+
   const createPost = (newPost: IPost) => {
     setPosts([...posts, newPost]);
+    setIsModal(false);
   };
 
   const deletePost = (id: number) => {
@@ -38,9 +43,7 @@ const MainPage = () => {
 
   const sortedPosts = useMemo(() => {
     if (filter.sort) {
-      return posts.sort(
-        (a, b) => a[filter.sort!].localeCompare(b[filter.sort!]) //TODO разобраться с типами
-      );
+      return posts.sort((a, b) => a[filter.sort].localeCompare(b[filter.sort])); //TODO
     }
     return posts;
   }, [filter.sort, posts]);
@@ -56,27 +59,18 @@ const MainPage = () => {
 
   return (
     <>
-      <PostForm create={createPost} />
-      <hr style={{ margin: "15px" }} />
+      <MyButton type="button" onClick={() => setIsModal(true)}>
+        Создать пост
+      </MyButton>
+      <MyModal visible={isModal} setVisible={setIsModal}>
+        <PostForm create={createPost} />
+      </MyModal>
       <PostFilter filter={filter} setFilter={setFilter} />
-      {!sortedAndSearchedPosts.length ? (
-        <span
-          style={{
-            display: "inline-block",
-            width: "100%",
-            marginTop: "20px",
-            textAlign: "center",
-          }}
-        >
-          Посты не найдены
-        </span>
-      ) : (
-        <PostsList
-          posts={sortedAndSearchedPosts}
-          remove={deletePost}
-          title="Список постов"
-        />
-      )}
+      <PostsList
+        posts={sortedAndSearchedPosts}
+        remove={deletePost}
+        title="Список постов"
+      />
     </>
   );
 };

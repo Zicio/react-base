@@ -1,6 +1,7 @@
 import { IFilter } from "../../types";
 import MyInput from "../UI/Input/MyInput";
 import MySelect from "../UI/select/MySelect";
+import styles from "./PostFilter.module.css";
 
 interface IPostFilter {
   filter: IFilter;
@@ -9,7 +10,7 @@ interface IPostFilter {
 
 const PostFilter: React.FC<IPostFilter> = ({ filter, setFilter }) => {
   return (
-    <div>
+    <div className={styles.post_filter}>
       <MyInput
         type="text"
         placeholder="Поиск..."

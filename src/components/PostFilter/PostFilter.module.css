@@ -1,0 +1,7 @@
+.post_filter {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: fit-content;
+  margin-top: 20px;
+}
