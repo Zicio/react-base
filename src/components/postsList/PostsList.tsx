@@ -1,7 +1,8 @@
 import { FC } from "react";
-import styles from "./PostsList.module.css";
+import styles from "./Postslist.module.css";
 import { IPost } from "../../types";
 import PostItem from "../postItem/PostItem";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 const PostsList: FC<{
   posts: IPost[];
@@ -25,15 +26,14 @@ const PostsList: FC<{
   return (
     <>
       <h2 className={styles.posts_list__title}>{title}</h2>
-      <ol className={styles.posts_list}>
-        {posts.map((post, index) => (
-          <PostItem
-            key={post.id}
-            post={post}
-            index={index + 1}
-            remove={remove}
-          />
-        ))}
+      <ol>
+        <TransitionGroup className={styles.posts_list}>
+          {posts.map((post, index) => (
+            <CSSTransition key={post.id} timeout={500} classNames={"post"}>
+              <PostItem post={post} index={index + 1} remove={remove} />
+            </CSSTransition>
+          ))}
+        </TransitionGroup>
       </ol>
     </>
   );
