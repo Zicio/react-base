@@ -8,6 +8,7 @@ import { usePosts } from "../hooks/usePosts";
 import PostFilter from "../components/postFilter/PostFilter";
 import { PostService } from "../API/PostService";
 import Loader from "../components/UI/loader/Loader";
+import useFetching from "../hooks/useFetching";
 
 const MainPage = () => {
   const [posts, setPosts] = useState<IPost[]>([]);
@@ -19,9 +20,11 @@ const MainPage = () => {
 
   const [isModal, setIsModal] = useState<boolean>(false);
 
-  const [isPostsLoading, setIsPostsLoading] = useState<boolean>(false);
-
   const sortedAndSearchedPosts = usePosts({ posts, ...filter });
+
+  const [fetchPosts, isPostsLoading, postsError] = useFetching(async () => {
+    setPosts(await PostService.getAll());
+  });
 
   useEffect(() => {
     fetchPosts();
@@ -32,27 +35,12 @@ const MainPage = () => {
     setIsModal(false);
   };
 
-  const fetchPosts = async () => {
-    setIsPostsLoading(true);
-    setPosts(await PostService.getAll());
-    setIsPostsLoading(false);
-  };
-
   const deletePost = (id: number) => {
     setPosts(posts.filter((post) => post.id !== id));
   };
 
   return (
     <>
-      <MyButton
-        type="submit"
-        onClick={(e) => {
-          e.preventDefault();
-          return fetchPosts();
-        }}
-      >
-        Get Posts
-      </MyButton>
       <MyButton type="button" onClick={() => setIsModal(true)}>
         Создать пост
       </MyButton>
@@ -60,6 +48,7 @@ const MainPage = () => {
         <PostForm create={createPost} />
       </MyModal>
       <PostFilter filter={filter} setFilter={setFilter} />
+      {postsError && <p>`${postsError as string}`</p>}
       {isPostsLoading ? (
         <div
           style={{
