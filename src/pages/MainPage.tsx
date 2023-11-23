@@ -9,21 +9,26 @@ import PostFilter from "../components/postFilter/PostFilter";
 import { PostService } from "../API/PostService";
 import Loader from "../components/UI/loader/Loader";
 import useFetching from "../hooks/useFetching";
+import { getPageCount } from "../components/utils/pages";
 
 const MainPage = () => {
   const [posts, setPosts] = useState<IPost[]>([]);
-
   const [filter, setFilter] = useState<IFilter>({
     sort: "",
     query: "",
   });
-
   const [isModal, setIsModal] = useState<boolean>(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
 
   const sortedAndSearchedPosts = usePosts({ posts, ...filter });
 
   const [fetchPosts, isPostsLoading, postsError] = useFetching(async () => {
-    setPosts(await PostService.getAll());
+    const response = await PostService.getAll(limit, page);
+    setPosts(response.data);
+    const totalCount: number = response.headers["x-total-count"];
+    setTotalPages(getPageCount(totalCount, limit));
   });
 
   useEffect(() => {
@@ -38,6 +43,8 @@ const MainPage = () => {
   const deletePost = (id: number) => {
     setPosts(posts.filter((post) => post.id !== id));
   };
+
+  const pagesArray = []; //TODO
 
   return (
     <>
