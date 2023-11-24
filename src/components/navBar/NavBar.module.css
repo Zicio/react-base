@@ -1,0 +1,22 @@
+.nav {
+  margin: 10px auto 0 auto;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+
+  .navLink {
+    color: black;
+    font-weight: bold;
+  }
+
+  .navLink:hover {
+    color: teal;
+    font-size: large;
+  }
+
+  .active {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
