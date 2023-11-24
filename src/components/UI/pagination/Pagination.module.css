@@ -1,0 +1,17 @@
+.page__wrapper {
+  margin-top: 30px;
+  display: flex;
+
+  .page {
+    padding: 10px;
+    border: 1px solid teal;
+    cursor: pointer;
+  }
+
+  .page__current {
+    background-color: teal;
+    color: white;
+    cursor: default;
+    opacity: 0.5;
+  }
+}

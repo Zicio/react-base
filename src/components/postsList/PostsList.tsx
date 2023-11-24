@@ -28,9 +28,9 @@ const PostsList: FC<{
       <h2 className={styles.posts_list__title}>{title}</h2>
       <ol>
         <TransitionGroup className={styles.posts_list}>
-          {posts.map((post, index) => (
+          {posts.map((post) => (
             <CSSTransition key={post.id} timeout={500} classNames={"post"}>
-              <PostItem post={post} index={index + 1} remove={remove} />
+              <PostItem post={post} index={post.id} remove={remove} />
             </CSSTransition>
           ))}
         </TransitionGroup>

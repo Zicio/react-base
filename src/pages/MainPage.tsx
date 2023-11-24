@@ -10,6 +10,7 @@ import { PostService } from "../API/PostService";
 import Loader from "../components/UI/loader/Loader";
 import useFetching from "../hooks/useFetching";
 import { getPageCount } from "../components/utils/pages";
+import Pagination from "../components/UI/pagination/PostsPagination";
 
 const MainPage = () => {
   const [posts, setPosts] = useState<IPost[]>([]);
@@ -33,7 +34,7 @@ const MainPage = () => {
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [page]);
 
   const createPost = (newPost: IPost) => {
     setPosts([...posts, newPost]);
@@ -43,8 +44,6 @@ const MainPage = () => {
   const deletePost = (id: number) => {
     setPosts(posts.filter((post) => post.id !== id));
   };
-
-  const pagesArray = []; //TODO
 
   return (
     <>
@@ -67,11 +66,18 @@ const MainPage = () => {
           <Loader />
         </div>
       ) : (
-        <PostsList
-          posts={sortedAndSearchedPosts}
-          remove={deletePost}
-          title="Список постов"
-        />
+        <>
+          <PostsList
+            posts={sortedAndSearchedPosts}
+            remove={deletePost}
+            title="Список постов"
+          />
+          <Pagination
+            totalPages={totalPages}
+            currentPage={page}
+            setPage={setPage}
+          />
+        </>
       )}
     </>
   );
