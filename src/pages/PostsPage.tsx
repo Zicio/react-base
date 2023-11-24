@@ -9,8 +9,8 @@ import PostFilter from "../components/postFilter/PostFilter";
 import { PostService } from "../API/PostService";
 import Loader from "../components/UI/loader/Loader";
 import useFetching from "../hooks/useFetching";
-import { getPageCount } from "../components/utils/pages";
-import Pagination from "../components/UI/pagination/PostsPagination";
+import { getPageCount } from "../utils/pages";
+import Pagination from "../components/UI/pagination/Pagination";
 
 const MainPage = () => {
   const [posts, setPosts] = useState<IPost[]>([]);

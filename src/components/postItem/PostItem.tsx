@@ -2,12 +2,14 @@ import { FC } from "react";
 import { IPost } from "../../types";
 import styles from "./postItem.module.css";
 import MyButton from "../UI/button/MyButton";
+import { useNavigate } from "react-router-dom";
 
 const PostItem: FC<{
   post: IPost;
   index: number;
   remove: (id: number) => void;
 }> = ({ post, index, remove }) => {
+  const navigate = useNavigate();
   const removePost = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     remove(post.id);
@@ -21,9 +23,14 @@ const PostItem: FC<{
       </div>
 
       <p>{post.body}</p>
-      <MyButton type="button" onClick={removePost}>
-        Удалить
-      </MyButton>
+      <div className={styles.post_item__btnBar}>
+        <MyButton type="button" onClick={() => navigate(`/pages/${post.id}`)}>
+          Открыть
+        </MyButton>
+        <MyButton type="button" onClick={removePost}>
+          Удалить
+        </MyButton>
+      </div>
     </li>
   );
 };

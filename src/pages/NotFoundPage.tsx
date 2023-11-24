@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
 const NotFoundPage = () => {
-  return <NavLink to={"/"}>Вернуться на главную</NavLink>;
+  return <NavLink to={"/posts"}>Вернуться на главную</NavLink>;
 };
 export default NotFoundPage;
