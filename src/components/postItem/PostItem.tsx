@@ -24,7 +24,7 @@ const PostItem: FC<{
 
       <p>{post.body}</p>
       <div className={styles.post_item__btnBar}>
-        <MyButton type="button" onClick={() => navigate(`/pages/${post.id}`)}>
+        <MyButton type="button" onClick={() => navigate(`/posts/${post.id}`)}>
           Открыть
         </MyButton>
         <MyButton type="button" onClick={removePost}>

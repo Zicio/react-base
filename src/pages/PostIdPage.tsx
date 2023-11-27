@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useFetching from "../hooks/useFetching";
 import { PostService } from "../API/PostService";
 import { IComment, IPost } from "../types";
@@ -7,6 +7,7 @@ import Loader from "../components/UI/loader/Loader";
 
 const PostIdPage = () => {
   const { id } = useParams();
+  // const navigate = useNavigate();
   const [post, setPost] = useState<IPost | null>(null);
   const [comments, setComments] = useState<IComment[] | null>(null);
   const [fetchPostById, isLoading, error] = useFetching(async () => {
@@ -28,6 +29,11 @@ const PostIdPage = () => {
     fetchComments(id);
   }, [id]);
 
+  // if (error || comError) {
+  //   navigate("/error");
+  //   return;
+  // }
+
   return (
     <>
       {isLoading ? (
@@ -44,7 +50,7 @@ const PostIdPage = () => {
         <>
           <h2>{post?.title}</h2>
           <p>{post?.body}</p>
-          <h3>Комментарии</h3>
+          <h3 style={{ marginTop: "30px" }}>Комментарии</h3>
           {isComLoading ? (
             <div
               style={{
@@ -56,17 +62,24 @@ const PostIdPage = () => {
               <Loader />
             </div>
           ) : (
-            comments?.map((comment) => {
-              return (
-                //TODO
-                <div key={comment.id}>
-                  <h4>
-                    {comment.name} {comment.email}
-                  </h4>
-                  <p>{comment.body}</p>
-                </div>
-              );
-            })
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+              }}
+            >
+              {comments?.map((comment) => {
+                return (
+                  <div key={comment.id}>
+                    <h4>
+                      {comment.name} {comment.email}
+                    </h4>
+                    <p>{comment.body}</p>
+                  </div>
+                );
+              })}
+            </div>
           )}
         </>
       )}

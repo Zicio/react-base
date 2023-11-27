@@ -1,21 +1,19 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useMatch } from "react-router-dom";
 import styles from "./NavBar.module.css";
 
 const NavBar = () => {
+  const matchPosts = useMatch("/posts");
+  const matchAbout = useMatch("/about");
   return (
     <nav className={styles.nav}>
       <NavLink
-        className={({ isActive }) =>
-          `${styles.navLink} ${isActive ? `${styles.active}` : ""}`
-        }
-        to={"/"}
+        className={`${styles.navLink} ${matchPosts ? `${styles.active}` : ""}`}
+        to={"/posts"}
       >
-        Home
+        Posts
       </NavLink>
       <NavLink
-        className={({ isActive }) =>
-          `${styles.navLink} ${isActive ? `${styles.active}` : ""}`
-        }
+        className={`${styles.navLink} ${matchAbout ? `${styles.active}` : ""}`}
         to={"/about"}
       >
         About
