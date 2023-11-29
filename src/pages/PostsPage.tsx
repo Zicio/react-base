@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PostsList from "../components/postsList/PostsList";
 import PostForm from "../components/postForm/PostForm";
 import { IFilter, IPost } from "../types";
@@ -11,6 +11,7 @@ import Loader from "../components/UI/loader/Loader";
 import useFetching from "../hooks/useFetching";
 import { getPageCount } from "../utils/pages";
 import Pagination from "../components/UI/pagination/Pagination";
+import { useObserver } from "../hooks/useObserver";
 
 const MainPage = () => {
   const [posts, setPosts] = useState<IPost[]>([]);
@@ -25,11 +26,17 @@ const MainPage = () => {
 
   const sortedAndSearchedPosts = usePosts({ posts, ...filter });
 
+  const lastElement = useRef();
+
   const [fetchPosts, isPostsLoading, postsError] = useFetching(async () => {
     const response = await PostService.getAll(limit, page);
-    setPosts(response.data);
+    setPosts([...posts, ...response.data]);
     const totalCount: number = response.headers["x-total-count"];
     setTotalPages(getPageCount(totalCount, limit));
+  });
+
+  useObserver(lastElement, page < totalPages, isPostsLoading, () => {
+    setPage(page + 1);
   });
 
   useEffect(() => {
@@ -55,7 +62,13 @@ const MainPage = () => {
       </MyModal>
       <PostFilter filter={filter} setFilter={setFilter} />
       {postsError && <p>`${postsError as string}`</p>}
-      {isPostsLoading ? (
+      <PostsList
+        posts={sortedAndSearchedPosts}
+        remove={deletePost}
+        title="Список постов"
+      />
+      <div ref={lastElement} style={{ height: "20px", background: "red" }} />
+      {isPostsLoading && (
         <div
           style={{
             display: "flex",
@@ -65,20 +78,12 @@ const MainPage = () => {
         >
           <Loader />
         </div>
-      ) : (
-        <>
-          <PostsList
-            posts={sortedAndSearchedPosts}
-            remove={deletePost}
-            title="Список постов"
-          />
-          <Pagination
-            totalPages={totalPages}
-            currentPage={page}
-            setPage={setPage}
-          />
-        </>
       )}
+      <Pagination
+        totalPages={totalPages}
+        currentPage={page}
+        setPage={setPage}
+      />
     </>
   );
 };

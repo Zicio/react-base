@@ -3,7 +3,7 @@ import { privateRoutes, publicRoutes } from "../router";
 import Layout from "./layout/Layout";
 
 const AppRouter = () => {
-  const isAuth = true; //TODO
+  const isAuth = true;
   return (
     <>
       <Route path="/" element={<Layout />}>
